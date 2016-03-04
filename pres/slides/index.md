@@ -6,178 +6,181 @@
 
 ***
 
-# Micro-services with F#
+# Micro-services, docker, logary with F#
+
+*oh my*
 
 ***
 
-### Virtual Tour Plan
+## Tonight is the Night
 
- -
+*of the metered micro-service*.
 
-
-
-> **Atwood's Law**: any application that can be written in JavaScript, will eventually be written in JavaScript.
+![Full Moon](images/full-moon.jpg)
 
 ***
 
-### F# the language
+### This presentation
 
-Comparison with Erlang
+ - my take on micro-services
+ - about F# as a language for distributed computation
+ - demo: InfluxDB-metrics from Logary on Docker
 
-<table>
-  <thead>
-  	<tr>
-  		<th></th>
-  		<th>F#</th>
-  		<th>Erlang</th>
-  	</tr>
-  </thead>
-  <tbody>
-  	<tr>
-  		<td>Virtual Machine</td>
-  		<td>Mono / .Net Framework</td>
-  		<td>Erlang VM</td>
-  	</tr>
-  	<tr>
-  		<td>Async Calls</td>
-  		<td>Async in F# Core, Job in Hopac</td>
-  		<td>Erlang Messages, rpc:async_call</td>
-  	</tr>
-  	<tr>
-  		<td>Per</td>
-  		<td></td>
-  		<td></td>
-  	</tr>
-  </tbody>
-</table>
+> **Henrik's Law**: any distributed application that can be written in F#, will eventually be written in F#.
+
+<aside class="notes">
+  Misquoted?
+</aside>
+
+
+
 
 ***
 
-### Syntax Highlighting
+### @haf – very pro indeed
 
-#### F# (with tooltips)
+ - distributed systems affectionado
+ - 12 years XP
+ - 8.2x programmer for sure
+ - *The philosopher of software*
 
-    let a = 5
-    let factorial x = [1..x] |> List.reduce (*)
-    let c = factorial a
-
----
-
-#### C#
-
-    [lang=cs]
-    using System;
-
-    class Program
-    {
-        static void Main()
-        {
-            Console.WriteLine("Hello, world!");
-        }
-    }
+<img src="images/very.jpg" style="width:35%; margin-left: 2em; clear: both" alt="@haf as a doge" />
 
 ---
 
-#### JavaScript
+### @haf – my work
 
-    [lang=js]
-    function copyWithEvaluation(iElem, elem) {
-        return function (obj) {
-            var newObj = {};
-            for (var p in obj) {
-                var v = obj[p];
-                if (typeof v === "function") {
-                    v = v(iElem, elem);
-                }
-                newObj[p] = v;
-            }
-            if (!newObj.exactTiming) {
-                newObj.delay += exports._libraryDelay;
-            }
-            return newObj;
-        };
-    }
+ - CEO and founder of [qvitoo.com](https://qvitoo.com)
+ - content partner at [fsharp.tv](https://fsharp.tv)
+ - coauthor of [Suave.io](https://suave.io) with [@ademar](https://github.com/ademar)
+ - author of [Albacore v2.0](https://github.com/Albacore/albacore/wiki)
+ - author of [Logary](https://github.com/logary)
+ - dabble a bit with [docker-fsharp](https://github.com/fsprojects/docker-fsharp)
 
 
----
 
-#### Haskell
-
-    [lang=haskell]
-    recur_count k = 1 : 1 :
-        zipWith recurAdd (recur_count k) (tail (recur_count k))
-            where recurAdd x y = k * x + y
-
-    main = do
-      argv <- getArgs
-      inputFile <- openFile (head argv) ReadMode
-      line <- hGetLine inputFile
-      let [n,k] = map read (words line)
-      printf "%d\n" ((recur_count k) !! (n-1))
-
-*code from [NashFP/rosalind](https://github.com/NashFP/rosalind/blob/master/mark_wutka%2Bhaskell/FIB/fib_ziplist.hs)*
-
----
-
-### SQL
-
-    [lang=sql]
-    select *
-    from
-    (select 1 as Id union all select 2 union all select 3) as X
-    where Id in (@Ids1, @Ids2, @Ids3)
-
-*sql from [Dapper](https://code.google.com/p/dapper-dot-net/)*
-
----
-
-### Paket
-
-    [lang=paket]
-    source https://nuget.org/api/v2
-
-    nuget Castle.Windsor-log4net >= 3.2
-    nuget NUnit
-
-    github forki/FsUnit FsUnit.fs
-
----
-
-### C/AL
-
-    [lang=cal]
-    PROCEDURE FizzBuzz(n : Integer) r_Text : Text[1024];
-    VAR
-      l_Text : Text[1024];
-    BEGIN
-      r_Text := '';
-      l_Text := FORMAT(n);
-
-      IF (n MOD 3 = 0) OR (STRPOS(l_Text,'3') > 0) THEN
-        r_Text := 'Fizz';
-      IF (n MOD 5 = 0) OR (STRPOS(l_Text,'5') > 0) THEN
-        r_Text := r_Text + 'Buzz';
-      IF r_Text = '' THEN
-        r_Text := l_Text;
-    END;
 
 ***
 
-**Bayes' Rule in LaTeX**
+## About micro services
 
-$ \Pr(A|B)=\frac{\Pr(B|A)\Pr(A)}{\Pr(B|A)\Pr(A)+\Pr(B|\neg A)\Pr(\neg A)} $
+Organisations
+
+<aside class="notes">
+  Micro-services are a lot about scaling organisational structures. As the number
+  of people in the organisation grows, it becomes exponentially hard to communicate
+  with everybody.
+
+  Micro-services let you specify invariants that you hide behind an API contract
+  and possibly an SLA.
+
+  Tech reflects your organisation. You build micro-services to be able to work
+  faster within your organisation, because there are fewer contention points then.
+</aside>
+
+---
+
+## About micro-services
+
+High Availability
+
+---
+
+## About micro-services
+
+Redundancy
+
+<aside class="notes">
+  If a single node fails you can fall over to another.
+
+  Multiple requests, take fastest.
+</aside>
+
+
 
 ***
 
-### The Reality of a Developer's Life
+## Trouble in Paradise
 
-**When I show my boss that I've fixed a bug:**
+Asynchronocity
 
-![When I show my boss that I've fixed a bug](http://www.topito.com/wp-content/uploads/2013/01/code-07.gif)
+![The Walking Dead](images/deadness.jpg)
 
-**When your regular expression returns what you expect:**
+<aside class="notes">
+  You may never get replies.
 
-![When your regular expression returns what you expect](http://www.topito.com/wp-content/uploads/2013/01/code-03.gif)
+  Method invocations are replaced with timeouts.
 
-*from [The Reality of a Developer's Life - in GIFs, Of Course](http://server.dzone.com/articles/reality-developers-life-gifs)*
+  Monitoring replaces reasoning with types.
+</aside>
 
+---
+
+## Trouble in Paradise
+
+The [FLP impossibility proof](http://the-paper-trail.org/blog/a-brief-tour-of-flp-impossibility/)
+
+---
+## Trouble in Paradise
+
+Interleaved execution
+
+---
+## Trouble in Paradise
+
+<aside class="notes">
+  Leads to interleaved logs.
+
+  State can be hard to reason about.
+</aside>
+
+
+
+
+
+***
+
+## How to mitigate?
+
+ - DevOps – your code in production is yours
+ - Logging (beginner)
+ - Metrics (intermediate)
+ - Tracing (advanced)
+
+<aside class="notes">
+  I'm gong to focus on metrics this presentation.
+</aside>
+
+
+***
+
+## Demo
+
+Setting up Logary with InfluxDB
+
+---
+
+![influx up](images/influx-screen.png)
+
+---
+
+![grafana config](images/grafana-conf.png)
+
+---
+
+![logary output](images/logary-output.png)
+
+
+***
+
+## Questions
+
+***
+
+## Stay in Touch
+
+ - [try qvitoo.com – free for now](https://qvitoo.com)
+ - [twitter.com/henrikfeldt](https://twitter.com/henrikfeldt)
+ - [learn more F#](https://fsharp.tv)
+ - [chat about Logary](https://gitter.im/logary/logary)
+ - [github.com/haf](https://github.com/haf)
