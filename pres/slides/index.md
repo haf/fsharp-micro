@@ -1,36 +1,55 @@
-- title : FsReveal
-- description : Introduction to FsReveal
-- author : Karlkim Suwanmongkol
+- title: Micro-services with F#
+- description : Introduction to micro-services and concepts in F#
+- author : Henrik Feldt
 - theme : night
 - transition : default
 
 ***
 
-### What is FsReveal?
-
-- Generates [reveal.js](http://lab.hakim.se/reveal-js/#/) presentation from [markdown](http://daringfireball.net/projects/markdown/)
-- Utilizes [FSharp.Formatting](https://github.com/tpetricek/FSharp.Formatting) for markdown parsing
-- Get it from [http://fsprojects.github.io/FsReveal/](http://fsprojects.github.io/FsReveal/)
-
-![FsReveal](images/logo.png)
+# Micro-services with F#
 
 ***
 
-### Reveal.js
+### Virtual Tour Plan
 
-- A framework for easily creating beautiful presentations using HTML.
+ -
+
 
 
 > **Atwood's Law**: any application that can be written in JavaScript, will eventually be written in JavaScript.
 
 ***
 
-### FSharp.Formatting
+### F# the language
 
-- F# tools for generating documentation (Markdown processor and F# code formatter).
-- It parses markdown and F# script file and generates HTML or PDF.
-- Code syntax highlighting support.
-- It also evaluates your F# code and produce tooltips.
+Comparison with Erlang
+
+<table>
+  <thead>
+  	<tr>
+  		<th></th>
+  		<th>F#</th>
+  		<th>Erlang</th>
+  	</tr>
+  </thead>
+  <tbody>
+  	<tr>
+  		<td>Virtual Machine</td>
+  		<td>Mono / .Net Framework</td>
+  		<td>Erlang VM</td>
+  	</tr>
+  	<tr>
+  		<td>Async Calls</td>
+  		<td>Async in F# Core, Job in Hopac</td>
+  		<td>Erlang Messages, rpc:async_call</td>
+  	</tr>
+  	<tr>
+  		<td>Per</td>
+  		<td></td>
+  		<td></td>
+  	</tr>
+  </tbody>
+</table>
 
 ***
 
@@ -83,9 +102,9 @@
 ---
 
 #### Haskell
- 
+
     [lang=haskell]
-    recur_count k = 1 : 1 : 
+    recur_count k = 1 : 1 :
         zipWith recurAdd (recur_count k) (tail (recur_count k))
             where recurAdd x y = k * x + y
 
@@ -119,9 +138,9 @@
 
     nuget Castle.Windsor-log4net >= 3.2
     nuget NUnit
-    
+
     github forki/FsUnit FsUnit.fs
-      
+
 ---
 
 ### C/AL
@@ -150,15 +169,15 @@ $ \Pr(A|B)=\frac{\Pr(B|A)\Pr(A)}{\Pr(B|A)\Pr(A)+\Pr(B|\neg A)\Pr(\neg A)} $
 
 ***
 
-### The Reality of a Developer's Life 
+### The Reality of a Developer's Life
 
 **When I show my boss that I've fixed a bug:**
-  
+
 ![When I show my boss that I've fixed a bug](http://www.topito.com/wp-content/uploads/2013/01/code-07.gif)
-  
+
 **When your regular expression returns what you expect:**
-  
+
 ![When your regular expression returns what you expect](http://www.topito.com/wp-content/uploads/2013/01/code-03.gif)
-  
+
 *from [The Reality of a Developer's Life - in GIFs, Of Course](http://server.dzone.com/articles/reality-developers-life-gifs)*
 
